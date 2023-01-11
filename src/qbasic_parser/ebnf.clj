@@ -17,7 +17,7 @@
                      value = (variable | literal | funcall)
                      literal = (string | number)
                      string  = quote character* quote
-                     <character> = #'[/.a-zA-Z0-9\\s!:()\\\\]'
+                     <character> = #'[@/.a-zA-Z0-9\\s!:()\\\\]'
                      <quote> = '\"'
                      funcall = funname args
                      funname = #'[A-Z]'+

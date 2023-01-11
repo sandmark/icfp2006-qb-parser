@@ -1,6 +1,7 @@
 (ns qbasic-parser.core
   (:gen-class)
   (:require
+   [clojure.pprint :as pp]
    [clojure.string :as str]
    [clojure.tools.cli :as cli]
    [clojure.walk :as w]
@@ -34,17 +35,24 @@
 (defn tree->string [tree]
   (->> tree flatten (keep string-and-integer) str/join))
 
+(defn parse [source]
+  (let [tree (parser source)]
+    (if (= instaparse.gll.Failure (type tree))
+      (throw (ex-info "Parse Error" {:cause tree}))
+      tree)))
+
 (defn decimalize-str [source]
-  (->> source
-       parser
-       (w/postwalk roman->decimal)
-       tree->string))
+  (try
+    (->> source parse (w/postwalk roman->decimal) tree->string)
+    (catch clojure.lang.ExceptionInfo e
+      (pp/pprint (ex-data e)))))
+
 
 (defn romanize-str [source]
-  (->> source
-       parser
-       (w/postwalk decimal->roman)
-       tree->string))
+  (try
+    (->> source parse (w/postwalk decimal->roman) tree->string)
+    (catch clojure.lang.ExceptionInfo e
+      (pp/pprint (ex-data e)))))
 
 (defn decimalize [file]
   (-> file slurp decimalize-str println))
