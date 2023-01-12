@@ -1,34 +1,48 @@
-# qbasic-parser
+# QBasic parser
 
-FIXME: description
+Qvick Basic parser for ICFP2006 using [instaparse](https://github.com/Engelberg/instaparse), supports:
+
+- Parse code and interconverts Roman numerals and decimal numbers
+- Transpile Common Lisp's `tagbody` expressions to Qvick Basic
 
 ## Installation
 
-Download from http://example.com/FIXME.
+Clone this repository (you'll need Leiningen to launch).
 
 ## Usage
 
-FIXME: explanation
+Inside repo dir, type:
+
+    lein run <-c|-r|-d> <file>
+
+or you can build uberjar with `lein uberjar` and run `java -jar ...` if necessary.
 
 ## Options
 
-FIXME: listing of options this app accepts.
+The results of each option will be displayed on stdout.
+
+- `-c` or `--compile`
+  Compile Common Lisp's `tagbody` to Qvick Basic (with decimal numbers).
+  See `dev/resources/qbasic.lisp` for more info.
+  NOTE: This does NOT support linking `GOTO` and `LABEL`... yet.
+- `-d` or `--decimalize`
+  Parse an original Qvick Basic code and convert Roman numerals to Decimal numbers.
+- `-r` or `--romanize`
+  Parse a decimalized Qvick Basic code and convert numbers to Roman numerals.
 
 ## Examples
 
-...
-
-### Bugs
-
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
+- `dev/resources/qbasic_roman.bas`
+  An original QB code, for option `-d`.
+- `dev/resources/qbasic_decimal.bas`
+  A decimalized QB code, and tweaked to work well on UM-IX.
+- `dev/resources/qbasic.lisp`
+  A mock-up of Qvick Basic that works as-is with Common Lisp implementations (tested on SBCL).
+  This can be compiled into Qvick Basic by passing the `-c` option.
 
 ## License
 
-Copyright © 2023 FIXME
+Copyright © 2023 sandmark
 
 This program and the accompanying materials are made available under the
 terms of the Eclipse Public License 2.0 which is available at
