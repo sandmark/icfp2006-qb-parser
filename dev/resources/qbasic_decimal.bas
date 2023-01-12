@@ -96,4 +96,40 @@
 480   REM    dictwordDD
 485  REM  where DD is a two-digit decimal number. try these next:
 490     i = 1
-495    DIM j AS INTEGER
+500 REM LABEL: START
+501 DIM zero AS INTEGER
+502 zero = 48
+503 DIM nine AS INTEGER
+504 nine = 57
+505 DIM one AS INTEGER
+506 one = 48
+507 DIM two AS INTEGER
+508 two = 48
+509 DIM pass AS STRING
+510 pass = ""
+511 REM LABEL: HACK
+512 pass = words(i) + CHR(two) + CHR(one)
+513 PRINT username + "@" + pass + CHR(10)
+514 IF CHECKPASS(username, pass) THEN GOTO 534
+515 GOTO 516
+516 REM LABEL: INC-ONE
+517 one = one + 1
+518 IF one > nine THEN GOTO 520
+519 GOTO 511
+520 REM LABEL: INC-TWO
+521 one = zero
+522 two = two + 1
+523 IF two > nine THEN GOTO 525
+524 GOTO 511
+525 REM LABEL: INC-I
+526 one = zero
+527 two = zero
+528 i = i + 1
+529 IF i > pwdcount THEN GOTO 531
+530 GOTO 511
+531 REM LABEL: FAIL
+532 PRINT "no matches." + CHR(10)
+533 GOTO 536
+534 REM LABEL: SUCCESS
+535 PRINT "success: " + username + "@" + pass + CHR(10)
+536 REM LABEL: END

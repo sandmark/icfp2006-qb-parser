@@ -8,7 +8,8 @@
    [instaparse.core :as insta]
    [mount.core :as m]
    [qbasic-parser.ebnf :as ebnf]
-   [qbasic-parser.roman :as roman]))
+   [qbasic-parser.roman :as roman]
+   [qbasic-parser.compiler :as compiler]))
 
 (m/defstate parser
   :start (insta/parser ebnf/line))
@@ -61,15 +62,17 @@
   (-> file slurp romanize-str println))
 
 (def cli-options
-  [["-r" "--roman"]])
+  [["-r" "--roman"]
+   ["-c" "--compile"]])
 
 (defn -main [& args]
-  (let [opts             (cli/parse-opts args cli-options)
-        {:keys [:roman]} (:options opts)
-        transform        (if roman romanize decimalize)
-        [filename]       (:arguments opts)]
+  (let [opts                      (cli/parse-opts args cli-options)
+        {:keys [:roman :compile]} (:options opts)
+        transform                 (if roman romanize decimalize)
+        [filename]                (:arguments opts)]
     (m/start)
-    (if filename
-      (transform filename)
-      (println "Usage: qbasic-parser.jar [-r|--roman] <filename>"))
+    (cond compile   (-> filename compiler/compile-file println)
+          transform (transform filename)
+          :else
+          (println "Usage: qbasic-parser.jar [-r|--roman] <filename>"))
     (m/stop)))
